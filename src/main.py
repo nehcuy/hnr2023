@@ -24,7 +24,7 @@ class Main:
                     running = False
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if self.start_button.is_pressed(pygame.mouse.get_pos()):
-                        state.runner.run()
+                        state.runner.Runner().run()
                     elif self.lb_button.is_pressed(pygame.mouse.get_pos()):
                         print("Leaderboard")
                         
