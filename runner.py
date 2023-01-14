@@ -50,10 +50,10 @@ while is_running:
 
 	# draw
 	screen.fill(BLACK)
-	player = pygame.draw.rect(screen, BLUE, (player_x, player_y - 25, 50, 50))
-	floor_divider_1 = pygame.draw.rect(screen, WHITE, (0, SCREEN_HEIGHT / 4, SCREEN_WIDTH, 5))
-	floor_divider_2 = pygame.draw.rect(screen, WHITE, (0, SCREEN_HEIGHT / 2, SCREEN_WIDTH, 5))
-	floor_divider_3 = pygame.draw.rect(screen, WHITE, (0, SCREEN_HEIGHT / 4 * 3, SCREEN_WIDTH, 5))
+	player = pygame.draw.rect(screen, BLUE, pygame.Rect(player_x, player_y - 25, 50, 50))
+	floor_divider_1 = pygame.draw.rect(screen, WHITE, pygame.Rect(0, SCREEN_HEIGHT / 4, SCREEN_WIDTH, 5))
+	floor_divider_2 = pygame.draw.rect(screen, WHITE, pygame.Rect(0, SCREEN_HEIGHT / 2, SCREEN_WIDTH, 5))
+	floor_divider_3 = pygame.draw.rect(screen, WHITE, pygame.Rect(0, SCREEN_HEIGHT / 4 * 3, SCREEN_WIDTH, 5))
 	# obstacle0 = pygame.draw.rect(screen, RED, OBSTACLE_START_X_POSITIONS[0], LANE_Y_POSITIONS[2], 20, 20)
 
 	# draw score in top right corner
