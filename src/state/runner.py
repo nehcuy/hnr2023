@@ -143,9 +143,9 @@ class Runner:
             floor_divider_3 = pygame.draw.rect(screen, c.WHITE, pygame.Rect(0, c.SCREEN_HEIGHT / 4 * 3, c.SCREEN_WIDTH, 5))
             
             # player animations
-            if pygame.key.get_pressed()[pygame.K_LEFT]: # character rolls
+            if pygame.key.get_pressed()[pygame.K_LEFT] or pygame.key.get_pressed()[pygame.K_a]: # character rolls
                 self.update_player(screen, delta_time, self.character_roll_frames)
-            elif pygame.key.get_pressed()[pygame.K_RIGHT]: # character chops
+            elif pygame.key.get_pressed()[pygame.K_RIGHT] or pygame.key.get_pressed()[pygame.K_d]: # character chops
                 self.update_player(screen, delta_time, self.character_chopping_frames)
             else: # default idle animation
                 self.update_player(screen, delta_time, self.player_frames)
@@ -160,13 +160,13 @@ class Runner:
                     is_collision = obstacle.x_pos < self.player_x + c.PLAYER_ASPECT_RATIO * c.PLAYER_SCALE and obstacle.x_pos + 10 > self.player_x
                     
                     # check if player is chopping obstacle
-                    if pygame.key.get_pressed()[pygame.K_RIGHT]:
+                    if pygame.key.get_pressed()[pygame.K_RIGHT] or pygame.key.get_pressed()[pygame.K_d]:
                         if is_collision and obstacle.type == 'tree':
                             self.obstacle_list.remove(obstacle)
                             break
 
                     # check if player is rolling over obstacle
-                    if pygame.key.get_pressed()[pygame.K_LEFT]:
+                    if pygame.key.get_pressed()[pygame.K_LEFT] or pygame.key.get_pressed()[pygame.K_a]:
                         if is_collision and obstacle.type == 'rock':
                             self.obstacle_list.remove(obstacle)
                             break
@@ -189,12 +189,12 @@ class Runner:
                     pygame.quit()
                 if event.type == pygame.KEYDOWN:
 
-                    if event.key == pygame.K_UP:
+                    if event.key == pygame.K_UP or event.key == pygame.K_w:
                         if self.player_lane > 0:
                             self.player_lane -= 1
                         self.player_y = c.LANE_Y_POSITIONS[self.player_lane]
 
-                    if event.key == pygame.K_DOWN:
+                    if event.key == pygame.K_DOWN or event.key == pygame.K_s:
                         if self.player_lane < 3:
                             self.player_lane += 1
                         self.player_y = c.LANE_Y_POSITIONS[self.player_lane]

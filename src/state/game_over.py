@@ -19,7 +19,7 @@ class GameOver:
         button_x = (self.screen.get_width() / 2) - (button_width / 2)
         button_y = 45
         self.lb_button = button.Button(button_width + 40, button_height, button_x - 20, button_y + 30, "Leaderboard")
-        self.play_again_button = button.Button(button_width, button_height, button_x, button_y - 30, "Play Again")
+        self.play_again_button = button.Button(button_width + 40, button_height, button_x - 20, button_y - 30, "Play Again")
 
     def run(self):
         running = True
