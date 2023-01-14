@@ -2,6 +2,7 @@ import pygame
 import button
 import state.runner
 import state.leaderboard
+import state.tutorial
 import state.constants as c
 
 class Main:
@@ -17,6 +18,7 @@ class Main:
         button_y = (self.screen.get_height() / 2) - (button_height / 2)
         self.start_button = button.Button(button_width, button_height, button_x, button_y - 30, "Start")
         self.lb_button = button.Button(button_width + 40, button_height, button_x - 20, button_y + 30, "Leaderboard")
+        self.tutorial_button = button.Button(button_width + 40, button_height, button_x - 20, button_y + 90, "Tutorial")
 
         self.leaderboard = state.leaderboard.Leaderboard()
         
@@ -33,9 +35,12 @@ class Main:
                         state.runner.Runner(self.leaderboard).run()
                     elif self.lb_button.is_pressed(pygame.mouse.get_pos()):
                         self.leaderboard.run()
+                    elif self.tutorial_button.is_pressed(pygame.mouse.get_pos()):
+                        state.tutorial.Tutorial(self.leaderboard).run()
                         
             self.start_button.draw(self.screen)
             self.lb_button.draw(self.screen)
+            self.tutorial_button.draw(self.screen)
             pygame.display.flip()
         pygame.quit()
 

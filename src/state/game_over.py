@@ -1,5 +1,6 @@
 import pygame
 import button
+import main
 import state.constants as c
 
 from . import runner
@@ -20,6 +21,7 @@ class GameOver:
         button_y = 45
         self.lb_button = button.Button(button_width + 40, button_height, button_x - 20, button_y + 30, "Leaderboard")
         self.play_again_button = button.Button(button_width + 40, button_height, button_x - 20, button_y - 30, "Play Again")
+        self.main_menu_button = button.Button(button_width + 40, button_height, button_x - 20, button_y + 90, "Main Menu")
 
     def run(self):
         running = True
@@ -34,8 +36,11 @@ class GameOver:
                         self.leaderboard.run()
                     elif self.play_again_button.is_pressed(pygame.mouse.get_pos()):
                         runner.Runner(self.leaderboard).run()
+                    elif self.main_menu_button.is_pressed(pygame.mouse.get_pos()):
+                        main.Main().run()
 
-            self.lb_button.draw(self.screen)
             self.play_again_button.draw(self.screen)
+            self.lb_button.draw(self.screen)
+            self.main_menu_button.draw(self.screen)
             pygame.display.flip()
         pygame.quit()

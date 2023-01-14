@@ -2,7 +2,6 @@ import pygame
 import button
 from . import constants
 
-
 class Leaderboard:
 
     def __init__(self):
