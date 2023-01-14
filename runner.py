@@ -47,6 +47,10 @@ while is_running:
 	# update display
 	pygame.display.update()
 
+	# set fps
+	clock = pygame.time.Clock()
+	clock.tick(fps)
+
 	# event loop
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
