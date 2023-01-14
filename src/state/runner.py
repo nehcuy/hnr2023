@@ -12,26 +12,24 @@ class Runner:
     player_lane = 0
     delta_x = 0
     delta_y = 0
-
-    gravity = 1
     score = 0
-    spawn_index = random.randrange(0, len(constants.LANE_Y_POSITIONS) - 1)
-    active = True
 
-    # character images
-    character_frames = [pygame.image.load(os.path.join(constants.APP_FOLDER, "images", "character_frames", "Walk-4.png")),
+    # player images
+    player_frames = [pygame.image.load(os.path.join(constants.APP_FOLDER, "images", "character_frames", "Walk-4.png")),
 						pygame.image.load(os.path.join(constants.APP_FOLDER, "images", "character_frames", "Walk-3.png")),
 						pygame.image.load(os.path.join(constants.APP_FOLDER, "images", "character_frames", "Walk-2.png")),
 						pygame.image.load(os.path.join(constants.APP_FOLDER, "images", "character_frames", "Walk-1.png"))]
-    character_index = 0
-    character_frame_count = 0;
+    player_frame_index = 0
+    player_time_elapsed = 0
 
-    def display_character(self, character, delta_time):
-        self.character_frame_count += delta_time
-        if self.character_frame_count >= 100:
-            self.character_frame_count -= 100
-            self.character_index += 1
-        return character[self.character_index % len(character)]
+    def update_player(self, player_frames, delta_time):
+        self.player_time_elapsed += delta_time
+        if self.player_time_elapsed >= constants.PLAYER_ANIMATION_THRESHOLD:
+            self.player_time_elapsed -= constants.PLAYER_ANIMATION_THRESHOLD
+            self.player_frame_index += 1
+        if self.player_frame_index >= len(player_frames):
+            self.player_frame_index = 0
+        return player_frames[self.player_frame_index]
 
     def run(self):
         # initialize pygame
@@ -54,15 +52,14 @@ class Runner:
 
             # draw
             screen.fill(constants.BLACK)
-            # player = pygame.draw.rect(screen, constants.BLUE, pygame.Rect(self.player_x, self.player_y - 25, 50, 50))
             floor_divider_1 = pygame.draw.rect(screen, constants.WHITE, pygame.Rect(0, constants.SCREEN_HEIGHT / 4, constants.SCREEN_WIDTH, 5))
             floor_divider_2 = pygame.draw.rect(screen, constants.WHITE, pygame.Rect(0, constants.SCREEN_HEIGHT / 2, constants.SCREEN_WIDTH, 5))
             floor_divider_3 = pygame.draw.rect(screen, constants.WHITE, pygame.Rect(0, constants.SCREEN_HEIGHT / 4 * 3, constants.SCREEN_WIDTH, 5))
-            obstacle0 = pygame.draw.rect(screen, constants.RED, pygame.Rect(constants.OBSTACLE_START_X_POSITIONS[0], constants.LANE_Y_POSITIONS[self.spawn_index], 20, 20))
+            # obstacle0 = pygame.draw.rect(screen, constants.RED, pygame.Rect(constants.OBSTACLE_START_X_POSITIONS[0], constants.LANE_Y_POSITIONS[self.spawn_index], 20, 20))
 
             # player animation
-            player = self.display_character(self.character_frames, delta_time)
-            player = pygame.transform.smoothscale(player, (constants.PLAYER_WALK_RATIO * constants.CHAR_LENGTH, constants.CHAR_LENGTH))
+            player = self.update_player(self.player_frames, delta_time)
+            player = pygame.transform.smoothscale(player, (constants.PLAYER_ASPECT_RATIO * constants.PLAYER_SCALE, constants.PLAYER_SCALE))
             screen.blit(player, (self.player_x, self.player_y - constants.PLAYER_Y_OFFSET))
 
             # draw score in top right corner
@@ -87,13 +84,6 @@ class Runner:
                         if self.player_lane < 3:
                             self.player_lane += 1
                         self.player_y = constants.LANE_Y_POSITIONS[self.player_lane]
-
-            for i in range(len(constants.OBSTACLE_START_X_POSITIONS)):
-                if self.active:
-                    constants.OBSTACLE_START_X_POSITIONS[i] -= constants.OBSTACLE_X_SPEED + int(score * 0.5)
-                    if constants.OBSTACLE_START_X_POSITIONS[i] < -50:
-                        self.spawn_index = random.randint(0, len(constants.LANE_Y_POSITIONS) - 1)
-                        constants.OBSTACLE_START_X_POSITIONS[i] = random.randint(900, 1000)
                         
             # out-of-bounds constraints
             if self.player_y < 0:
@@ -106,8 +96,8 @@ class Runner:
                 # TODO game over
                 self.player_x = 0
             
-            if self.player_x + constants.CHAR_LENGTH > constants.SCREEN_WIDTH:
-                self.player_x = constants.SCREEN_WIDTH - constants.CHAR_LENGTH
+            if self.player_x + constants.PLAYER_SCALE > constants.SCREEN_WIDTH:
+                self.player_x = constants.SCREEN_WIDTH - constants.PLAYER_SCALE
                 
             pygame.display.flip()
         pygame.quit()
