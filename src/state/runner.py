@@ -89,5 +89,3 @@ class Runner:
                 
             pygame.display.flip()
         pygame.quit()
-
-	
