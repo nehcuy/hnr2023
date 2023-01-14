@@ -22,6 +22,6 @@ class Button:
         self.screen.fill(self.button_color, self.rect)
         self.screen.blit(self.msg_image, self.msg_image_rect)
       
-    # check if this is the start button and was clicked
+    # check if this is the start button
     def is_start_button(self, mouse_x, mouse_y):
         return self.rect.collidepoint(mouse_x, mouse_y) and self.msg == "Start"

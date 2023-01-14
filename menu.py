@@ -21,5 +21,5 @@ class Menu:
         # get mouse pos x and y
         mouse_x, mouse_y = pygame.mouse.get_pos()
         # check if mouse is on play button
-        return self.play_button.is_start_button() and pygame.mouse.get_pressed()[0]
+        return self.play_button.is_start_button(mouse_x, mouse_y) and pygame.mouse.get_pressed()[0]
 
