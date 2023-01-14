@@ -142,12 +142,12 @@ class Runner:
             floor_divider_2 = pygame.draw.rect(screen, c.WHITE, pygame.Rect(0, c.SCREEN_HEIGHT / 2, c.SCREEN_WIDTH, 5))
             floor_divider_3 = pygame.draw.rect(screen, c.WHITE, pygame.Rect(0, c.SCREEN_HEIGHT / 4 * 3, c.SCREEN_WIDTH, 5))
             
-            # player animation
+            # player animations
             if pygame.key.get_pressed()[pygame.K_LEFT]: # character rolls
                 self.update_player(screen, delta_time, self.character_roll_frames)
             elif pygame.key.get_pressed()[pygame.K_RIGHT]: # character chops
                 self.update_player(screen, delta_time, self.character_chopping_frames)
-            else: # character walks
+            else: # default idle animation
                 self.update_player(screen, delta_time, self.player_frames)
 
             # draw & update obstacles
@@ -156,10 +156,26 @@ class Runner:
             # detect collision
             for obstacle in self.obstacle_list:
                 if obstacle.lane == self.player_lane:
-                    if obstacle.x_pos < self.player_x + c.PLAYER_ASPECT_RATIO * c.PLAYER_SCALE and obstacle.x_pos + 10 > self.player_x:
+                    # check if player is within obstacle's x range
+                    is_collision = obstacle.x_pos < self.player_x + c.PLAYER_ASPECT_RATIO * c.PLAYER_SCALE and obstacle.x_pos + 10 > self.player_x
+                    
+                    # check if player is chopping obstacle
+                    if pygame.key.get_pressed()[pygame.K_RIGHT]:
+                        if is_collision and obstacle.type == 'tree':
+                            self.obstacle_list.remove(obstacle)
+                            break
+
+                    # check if player is rolling over obstacle
+                    if pygame.key.get_pressed()[pygame.K_LEFT]:
+                        if is_collision and obstacle.type == 'rock':
+                            self.obstacle_list.remove(obstacle)
+                            break
+
+                    if is_collision:
                         self.obstacle_list.clear()
                         is_running = False
                         g_o.GameOver(self.leaderboard, score).run()
+                        break
 
             # draw score in top right corner
             font = pygame.font.SysFont('Arial', 30)
