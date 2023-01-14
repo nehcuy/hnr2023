@@ -185,6 +185,7 @@ class Runner:
             # event loop
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
+                    self.leaderboard.save_leaderboard()
                     pygame.quit()
                 if event.type == pygame.KEYDOWN:
 

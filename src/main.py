@@ -7,7 +7,7 @@ import state.constants as c
 class Main:
     def __init__(self):
         pygame.init()
-        self.screen = pygame.display.set_mode((400, 300))
+        self.screen = pygame.display.set_mode((c.SCREEN_WIDTH, c.SCREEN_HEIGHT))
         pygame.display.set_caption("Hack and Roll")
 
         # Create the button
@@ -26,6 +26,7 @@ class Main:
             self.screen.fill(c.GREY)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
+                    self.leaderboard.save_leaderboard()
                     pygame.quit()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if self.start_button.is_pressed(pygame.mouse.get_pos()):

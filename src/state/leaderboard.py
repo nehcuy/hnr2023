@@ -11,6 +11,15 @@ class Leaderboard:
         # state for leaderboard
         self.leaderboard = []
 
+        # populate leaderboard if file exists
+        try:
+            with open(constants.LEADERBOARD_FILE, 'r') as f:
+                for line in f:
+                    player = line.split('-+-')
+                    self.leaderboard.append((player[0], int(player[1])))
+        except FileNotFoundError:
+            pass
+
         self.screen = pygame.display.set_mode((constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT))
         pygame.display.set_caption("Hack and Roll: Leaderboard")
 
@@ -26,19 +35,25 @@ class Leaderboard:
         self.leaderboard = sorted(self.leaderboard, key=lambda x: x[1], reverse=True)
         self.leaderboard = self.leaderboard[:5]
 
+    def save_leaderboard(self):
+        with open(constants.LEADERBOARD_FILE, 'w+') as f:
+            for player in self.leaderboard:
+                f.write(player[0] + '-+-' + str(player[1]) + '\n')
+
     def run(self):
         running = True
         self.screen.fill(constants.GREY)
         while running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
+                    self.save_leaderboard()
                     pygame.quit()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if self.back_button.is_pressed(pygame.mouse.get_pos()):
                         running = False
 
             # draw leaderboard with back button
-            font = pygame.font.SysFont('Courier', 30)
+            font = pygame.font.SysFont('couriernew', 30)
             for index, player in enumerate(self.leaderboard):
                 text = font.render(
                     player[0] + ': ' + "{:02d}".format(player[1]), True, (255, 255, 255))

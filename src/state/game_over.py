@@ -27,6 +27,7 @@ class GameOver:
             self.screen.fill(c.GREY)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
+                    self.leaderboard.save_leaderboard()
                     pygame.quit()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if self.lb_button.is_pressed(pygame.mouse.get_pos()):
