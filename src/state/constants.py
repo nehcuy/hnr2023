@@ -1,4 +1,6 @@
 import time
+import os
+import sys
 
 # constants
 SCREEN_WIDTH = 800
@@ -16,6 +18,7 @@ LANE_Y_POSITIONS = [PLAYER_Y_START,
     PLAYER_Y_START + SCREEN_HEIGHT / 4 * 3]
 FPS = 60
 START_TIME = time.time()
+APP_FOLDER = os.path.dirname(os.path.realpath(sys.argv[0]))
 
 # colors
 WHITE = (255, 255, 255)
