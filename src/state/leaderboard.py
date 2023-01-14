@@ -17,6 +17,8 @@ class Leaderboard:
                 for line in f:
                     player = line.split('-+-')
                     self.leaderboard.append((player[0], int(player[1])))
+                self.leaderboard = sorted(self.leaderboard, key=lambda x: x[1], reverse=True)
+                self.leaderboard = self.leaderboard[:5]
         except FileNotFoundError:
             pass
 
