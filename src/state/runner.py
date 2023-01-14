@@ -14,7 +14,7 @@ PLAYER_X_SPEED = SCREEN_WIDTH/100
 PLAYER_X_START = 0
 PLAYER_Y_START = SCREEN_HEIGHT/8
 OBSTACLE_X_SPEED = 5
-OBSTACLE_START_X_POSITIONS = [350, 400, 600]
+OBSTACLE_START_X_POSITIONS = [900, 1000, 850]
 LANE_Y_POSITIONS = [PLAYER_Y_START, 
 	PLAYER_Y_START + SCREEN_HEIGHT / 4, 
 	PLAYER_Y_START + SCREEN_HEIGHT / 2,
@@ -37,7 +37,8 @@ delta_x = 0
 delta_y = 0
 gravity = 1
 score = 0
-active = False
+spawn_index = random.randrange(0, len(LANE_Y_POSITIONS) - 1)
+active = True
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Hack and Roll")
@@ -54,7 +55,7 @@ while is_running:
 	floor_divider_1 = pygame.draw.rect(screen, WHITE, pygame.Rect(0, SCREEN_HEIGHT / 4, SCREEN_WIDTH, 5))
 	floor_divider_2 = pygame.draw.rect(screen, WHITE, pygame.Rect(0, SCREEN_HEIGHT / 2, SCREEN_WIDTH, 5))
 	floor_divider_3 = pygame.draw.rect(screen, WHITE, pygame.Rect(0, SCREEN_HEIGHT / 4 * 3, SCREEN_WIDTH, 5))
-	# obstacle0 = pygame.draw.rect(screen, RED, OBSTACLE_START_X_POSITIONS[0], LANE_Y_POSITIONS[2], 20, 20)
+	obstacle0 = pygame.draw.rect(screen, RED, pygame.Rect(OBSTACLE_START_X_POSITIONS[0], LANE_Y_POSITIONS[spawn_index], 20, 20))
 
 	# draw score in top right corner
 	font = pygame.font.SysFont('Arial', 30)
@@ -89,8 +90,10 @@ while is_running:
 	for i in range(len(OBSTACLE_START_X_POSITIONS)):
 		if active:
 			OBSTACLE_START_X_POSITIONS[i] -= OBSTACLE_X_SPEED
-			if OBSTACLE_START_X_POSITIONS[i] < -20:
-				OBSTACLE_START_X_POSITIONS[i] = random.randint(470, 570)
+			if OBSTACLE_START_X_POSITIONS[i] < -50:
+				spawn_index = random.randint(0, len(LANE_Y_POSITIONS) - 1)
+				OBSTACLE_START_X_POSITIONS[i] = random.randint(900, 1000)
+				
 	# out-of-bounds constraints
 	if player_y < 0:
 		player_y = LANE_Y_POSITIONS[0]
