@@ -22,7 +22,7 @@ class Main:
         while running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    running = False
+                    pygame.quit()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if self.start_button.is_pressed(pygame.mouse.get_pos()):
                         state.runner.Runner().run()
