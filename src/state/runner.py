@@ -88,7 +88,7 @@ class Runner:
             score = int(time.time() - start_time)
 
             # draw
-            screen.fill(c.BLACK)
+            screen.fill(c.GREY)
             floor_divider_1 = pygame.draw.rect(screen, c.WHITE, pygame.Rect(0, c.SCREEN_HEIGHT / 4, c.SCREEN_WIDTH, 5))
             floor_divider_2 = pygame.draw.rect(screen, c.WHITE, pygame.Rect(0, c.SCREEN_HEIGHT / 2, c.SCREEN_WIDTH, 5))
             floor_divider_3 = pygame.draw.rect(screen, c.WHITE, pygame.Rect(0, c.SCREEN_HEIGHT / 4 * 3, c.SCREEN_WIDTH, 5))

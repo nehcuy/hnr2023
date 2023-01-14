@@ -1,4 +1,5 @@
 import pygame
+import state.constants as c
 
 class Button:
     def __init__(self, width, height, x, y, text):
@@ -6,11 +7,11 @@ class Button:
         self.height = height
         self.x = x
         self.y = y
-        self.color = (255, 0, 0)
+        self.color = c.RED
         self.button = pygame.Surface((self.width, self.height))
         self.button.fill(self.color)
         self.font = pygame.font.SysFont("Arial", 24)
-        self.text = self.font.render(text, True, (255, 255, 255))
+        self.text = self.font.render(text, True, c.WHITE)
     
     def draw(self, screen):
         screen.blit(self.button, (self.x, self.y))

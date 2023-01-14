@@ -2,6 +2,7 @@ import pygame
 import button
 import state.runner
 import state.leaderboard
+import state.constants as c
 
 class Main:
     def __init__(self):
@@ -22,6 +23,7 @@ class Main:
     def run(self):
         running = True
         while running:
+            self.screen.fill(c.GREY)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()

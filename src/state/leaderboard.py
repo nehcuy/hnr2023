@@ -30,7 +30,7 @@ class Leaderboard:
 
     def run(self):
         running = True
-        self.screen.fill((0, 0, 0))
+        self.screen.fill(constants.GREY)
         while running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:

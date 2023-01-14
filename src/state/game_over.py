@@ -1,5 +1,6 @@
 import pygame
 import button
+import state.constants as c
 
 from . import leaderboard
 from . import runner
@@ -22,6 +23,7 @@ class GameOver:
     def run(self):
         running = True
         while running:
+            self.screen.fill(c.GREY)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
