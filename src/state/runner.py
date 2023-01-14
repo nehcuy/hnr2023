@@ -91,7 +91,7 @@ def run():
 
 		for i in range(len(OBSTACLE_START_X_POSITIONS)):
 			if active:
-				OBSTACLE_START_X_POSITIONS[i] -= (OBSTACLE_X_SPEED + (score // 2))
+				OBSTACLE_START_X_POSITIONS[i] -= (OBSTACLE_X_SPEED + (score // 3))
 				if OBSTACLE_START_X_POSITIONS[i] < -50:
 					spawn_index = random.randint(0, len(LANE_Y_POSITIONS) - 1)
 					OBSTACLE_START_X_POSITIONS[i] = random.randint(900, 1000)
