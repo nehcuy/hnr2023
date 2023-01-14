@@ -3,11 +3,13 @@ import pygame
 import time
 import random
 import os
+import sys
 
 from . import game_over as g_o
 from . import leaderboard as lb
 from . import constants as c
-from . import obstacle as obs
+sys.path.append("..")
+import obstacle as obs
 
 class Runner:
     # coordinates
