@@ -15,7 +15,7 @@ class Leaderboard:
             with open(constants.LEADERBOARD_FILE, 'r') as f:
                 for line in f:
                     player = line.split('-+-')
-                    self.leaderboard.append((player[0], int(player[1])))
+                    self.leaderboard.append((player[0], int(player[1]), int(player[2]), int(player[3])))
                 self.leaderboard = sorted(self.leaderboard, key=lambda x: x[1], reverse=True)
                 self.leaderboard = self.leaderboard[:5]
         except FileNotFoundError:
@@ -31,15 +31,15 @@ class Leaderboard:
         button_y = 45
         self.back_button = button.Button(button_width, button_height, button_x, button_y - 30, "Back")
 
-    def add_score(self, name, score):
-        self.leaderboard.append((name, score))
+    def add_score(self, name, score, time_elapsed, obstacles_destroyed):
+        self.leaderboard.append((name, score, time_elapsed, obstacles_destroyed))
         self.leaderboard = sorted(self.leaderboard, key=lambda x: x[1], reverse=True)
         self.leaderboard = self.leaderboard[:5]
 
     def save_leaderboard(self):
         with open(constants.LEADERBOARD_FILE, 'w+') as f:
             for player in self.leaderboard:
-                f.write(player[0] + '-+-' + str(player[1]) + '\n')
+                f.write(player[0] + '-+-' + str(player[1]) + '-+-' + str(player[2]) + '-+-' + str(player[3]) + '\n')
 
     def run(self):
         running = True

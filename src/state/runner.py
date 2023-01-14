@@ -108,7 +108,7 @@ class Runner:
 
         
         for obstacle in self.obstacle_list[:]:
-            obstacle.x_pos -= x_speed + (self.score // 2) # speed up obstacles
+            obstacle.x_pos -= x_speed + (self.score // 10) # speed up obstacles
             if obstacle.x_pos < 0: # check out-of-bounds
                 self.obstacle_list.remove(obstacle)
                 continue
@@ -124,6 +124,7 @@ class Runner:
 
         is_running = True
         start_time = time.time()
+        obstacles_destroyed = 0
 
         while is_running: # Game loop
             # update display
@@ -134,7 +135,8 @@ class Runner:
             delta_time = clock.tick(c.FPS)
 
             # score
-            score = int(time.time() - start_time)
+            time_elapsed = int(time.time() - start_time)
+            self.score = time_elapsed + obstacles_destroyed * 5
 
             # draw
             screen.fill(c.GREY)
@@ -163,24 +165,26 @@ class Runner:
                     if pygame.key.get_pressed()[pygame.K_RIGHT] or pygame.key.get_pressed()[pygame.K_d]:
                         if is_collision and obstacle.type == 'tree':
                             self.obstacle_list.remove(obstacle)
+                            obstacles_destroyed += 1
                             break
 
                     # check if player is rolling over obstacle
                     if pygame.key.get_pressed()[pygame.K_LEFT] or pygame.key.get_pressed()[pygame.K_a]:
                         if is_collision and obstacle.type == 'rock':
                             self.obstacle_list.remove(obstacle)
+                            obstacles_destroyed += 1
                             break
 
                     if is_collision:
                         self.obstacle_list.clear()
                         is_running = False
-                        g_o.GameOver(self.leaderboard, score).run()
+                        g_o.GameOver(self.leaderboard, self.score, time_elapsed, obstacles_destroyed).run()
                         break
 
-            # draw score in top right corner
-            font = pygame.font.SysFont('Arial', 30)
-            text = font.render(str(score), False, c.WHITE)
-            screen.blit(text, (c.SCREEN_WIDTH - 50, 0))
+            # draw score in top right corner 
+            font = pygame.font.SysFont('courierms', 30)
+            text = font.render("Score: " + str(self.score), False, c.WHITE)
+            screen.blit(text, (c.SCREEN_WIDTH - 100, 10))
 
             # event loop
             for event in pygame.event.get():
