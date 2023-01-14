@@ -68,7 +68,7 @@ class Runner:
 
             for i in range(len(constants.OBSTACLE_START_X_POSITIONS)):
                 if self.active:
-                    constants.OBSTACLE_START_X_POSITIONS[i] -= constants.OBSTACLE_X_SPEED
+                    constants.OBSTACLE_START_X_POSITIONS[i] -= constants.OBSTACLE_X_SPEED + int(score * 0.5)
                     if constants.OBSTACLE_START_X_POSITIONS[i] < -50:
                         spawn_index = random.randint(0, len(constants.LANE_Y_POSITIONS) - 1)
                         constants.OBSTACLE_START_X_POSITIONS[i] = random.randint(900, 1000)
