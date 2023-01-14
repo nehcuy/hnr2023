@@ -6,7 +6,6 @@ import os
 import sys
 
 from . import game_over as g_o
-from . import leaderboard as lb
 from . import constants as c
 sys.path.append("..")
 import obstacle as obs
@@ -20,16 +19,27 @@ class Runner:
     delta_y = 0
     score = 0
 
-    # player
-    player_frames = [pygame.image.load(os.path.join(c.APP_FOLDER, "images", "character_uncoloured", "Walk-4.png")),
-						pygame.image.load(os.path.join(c.APP_FOLDER, "images", "character_uncoloured", "Walk-3.png")),
-						pygame.image.load(os.path.join(c.APP_FOLDER, "images", "character_uncoloured", "Walk-2.png")),
-						pygame.image.load(os.path.join(c.APP_FOLDER, "images", "character_uncoloured", "Walk-1.png"))]
+    # player states
+    player_frames = [pygame.image.load(os.path.join(c.APP_FOLDER, "images", "character_coloured", "Walk1-coloured.png")),
+						pygame.image.load(os.path.join(c.APP_FOLDER, "images", "character_coloured", "Walk2-coloured.png")),
+						pygame.image.load(os.path.join(c.APP_FOLDER, "images", "character_coloured", "Walk3-coloured.png")),
+						pygame.image.load(os.path.join(c.APP_FOLDER, "images", "character_coloured", "Walk4-coloured.png"))]
+
+    character_roll_frames = [pygame.image.load(os.path.join(c.APP_FOLDER, "images", "character_rolling", "Roll1.png")),
+                        pygame.image.load(os.path.join(c.APP_FOLDER, "images", "character_rolling", "Roll2.png")),
+                        pygame.image.load(os.path.join(c.APP_FOLDER, "images", "character_rolling", "Roll3.png")),
+                        pygame.image.load(os.path.join(c.APP_FOLDER, "images", "character_rolling", "Roll4.png")),]
+
+    character_chopping_frames = [pygame.image.load(os.path.join(c.APP_FOLDER, "images", "character_chopping", "Attack_1.png")),
+                        pygame.image.load(os.path.join(c.APP_FOLDER, "images", "character_chopping", "Attack_2.png")),
+                        pygame.image.load(os.path.join(c.APP_FOLDER, "images", "character_chopping", "Attack_3.png")),
+                        pygame.image.load(os.path.join(c.APP_FOLDER, "images", "character_chopping", "Attack_4.png")),]
+
     player = player_frames[0]
     player_frame_index = 0
     player_time_elapsed = 0
 
-    def update_player(self, screen, delta_time):
+    def update_player(self, screen, delta_time, player_animation):
         self.player_time_elapsed += delta_time
         if self.player_time_elapsed >= c.PLAYER_ANIMATION_THRESHOLD:
             self.player_time_elapsed -= c.PLAYER_ANIMATION_THRESHOLD
@@ -37,7 +47,7 @@ class Runner:
         if self.player_frame_index >= len(self.player_frames):
             self.player_frame_index = 0
         
-        self.player = self.player_frames[self.player_frame_index]
+        self.player = player_animation[self.player_frame_index]
         self.player = pygame.transform.smoothscale(self.player, 
             (c.PLAYER_ASPECT_RATIO * c.PLAYER_SCALE, c.PLAYER_SCALE))
         screen.blit(self.player, (self.player_x, self.player_y - c.PLAYER_Y_OFFSET))
@@ -96,7 +106,12 @@ class Runner:
             floor_divider_3 = pygame.draw.rect(screen, c.WHITE, pygame.Rect(0, c.SCREEN_HEIGHT / 4 * 3, c.SCREEN_WIDTH, 5))
             
             # player animation
-            self.update_player(screen, delta_time)
+            if pygame.key.get_pressed()[pygame.K_LEFT]: # character rolls
+                self.update_player(screen, delta_time, self.character_roll_frames)
+            elif pygame.key.get_pressed()[pygame.K_RIGHT]: # character chops
+                self.update_player(screen, delta_time, self.character_chopping_frames)
+            else: # character walks
+                self.update_player(screen, delta_time, self.player_frames)
 
             # draw & update obstacles
             self.update_obstacle(screen, delta_time, c.OBSTACLE_SPEED)
@@ -119,14 +134,12 @@ class Runner:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                 if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_LEFT:
-                        self.player_x -= c.PLAYER_X_SPEED * delta_time
-                    if event.key == pygame.K_RIGHT:
-                        self.player_x += c.PLAYER_X_SPEED * delta_time
+
                     if event.key == pygame.K_UP:
                         if self.player_lane > 0:
                             self.player_lane -= 1
                         self.player_y = c.LANE_Y_POSITIONS[self.player_lane]
+
                     if event.key == pygame.K_DOWN:
                         if self.player_lane < 3:
                             self.player_lane += 1
