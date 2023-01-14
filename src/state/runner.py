@@ -57,37 +57,52 @@ class Runner:
     obstacle_time_elapsed = 0
     obstacle_type_total_weight = c.OBSTACLE_TREE_CHANCE + c.OBSTACLE_SPIKE_CHANCE + c.OBSTACLE_ROCK_CHANCE
 
-    def generate_new_obstacle(self, screen):
+    def generate_new_obstacle(self, screen, lane):
         type_num = random.randint(1, self.obstacle_type_total_weight)
         if type_num <= c.OBSTACLE_TREE_CHANCE: # tree
             new_obstacle = obs.Obstacle(
                 pygame.image.load(os.path.join(c.APP_FOLDER, "images", "obstacles", "Tree.png")),
                 "tree",
-                random.randint(0, 3),
+                lane,
                 c.SCREEN_WIDTH)
         elif type_num <= c.OBSTACLE_TREE_CHANCE + c.OBSTACLE_ROCK_CHANCE: # rock
             new_obstacle = obs.Obstacle(
                 pygame.image.load(os.path.join(c.APP_FOLDER, "images", "obstacles", "Rock.png")),
                 "rock",
-                random.randint(0, 3),
+                lane,
                 c.SCREEN_WIDTH)
         else: # spike
             new_obstacle = obs.Obstacle(
                 pygame.image.load(os.path.join(c.APP_FOLDER, "images", "obstacles", "Spike.png")),
                 "spike",
-                random.randint(0, 3),
+                lane,
                 c.SCREEN_WIDTH)
         
         new_obstacle.surface = pygame.transform.smoothscale(new_obstacle.surface, 
             (c.OBSTACLE_ASPECT_RATIO * c.OBSTACLE_SCALE, c.OBSTACLE_SCALE))
         return new_obstacle
+    def generate_with_lane_pattern(self, screen):
+        lane_pattern = random.randint(0, len(c.OBSTACLE_LANE_PATTERNS) - 1)
+        if c.OBSTACLE_LANE_PATTERNS[lane_pattern][0] == 1:
+            self.obstacle_list.append(self.generate_new_obstacle(screen, 0))
+        if c.OBSTACLE_LANE_PATTERNS[lane_pattern][1] == 1:
+            self.obstacle_list.append(self.generate_new_obstacle(screen, 1))
+        if c.OBSTACLE_LANE_PATTERNS[lane_pattern][2] == 1:
+            self.obstacle_list.append(self.generate_new_obstacle(screen, 2))
+        if c.OBSTACLE_LANE_PATTERNS[lane_pattern][3] == 1:
+            self.obstacle_list.append(self.generate_new_obstacle(screen, 3))
 
     def update_obstacle(self, screen, x_speed, delta_time):
         self.obstacle_time_elapsed += delta_time
         if self.obstacle_time_elapsed >= c.OBSTACLE_CHANCE_THRESHOLD:
             self.obstacle_time_elapsed -= c.OBSTACLE_CHANCE_THRESHOLD
-            if random.random() <= c.OBSTACLE_CHANCE:
-                self.obstacle_list.append(self.generate_new_obstacle(screen))
+            # generate obstacle if within upper and lower bounds
+            if len(self.obstacle_list) < c.OBSTACLE_LOWER_BOUND:
+                self.generate_with_lane_pattern(screen)
+            elif random.random() <= c.OBSTACLE_CHANCE:
+                if len(self.obstacle_list) < c.OBSTACLE_UPPER_BOUND:
+                    self.generate_with_lane_pattern(screen)
+
         
         for obstacle in self.obstacle_list[:]:
             obstacle.x_pos -= x_speed
@@ -98,7 +113,6 @@ class Runner:
             screen.blit(obstacle.surface, 
                     (obstacle.x_pos, c.LANE_Y_POSITIONS[obstacle.lane] - c.OBSTACLE_Y_OFFSET))
     
-
     def run(self):
         # initialize pygame
         pygame.init()
@@ -107,8 +121,8 @@ class Runner:
 
         is_running = True
         start_time = time.time()
-        
-        while is_running:
+
+        while is_running: # Game loop
             # update display
             pygame.display.update()
 

@@ -27,6 +27,20 @@ OBSTACLE_CHANCE_THRESHOLD = 40 # milliseconds till chance check
 OBSTACLE_TREE_CHANCE = 10 # weight of tree spawn
 OBSTACLE_ROCK_CHANCE = 10 # weight of rock spawn
 OBSTACLE_SPIKE_CHANCE = 10 # weight of spike spawn
+OBSTACLE_LANE_PATTERNS = [
+    [0, 0, 0, 1],
+    [0, 0, 1, 0],
+    [0, 1, 0, 0],
+    [1, 0, 0, 0],
+    [0, 0, 1, 1],
+    [1, 1, 0, 0],
+    [1, 1, 1, 0],
+    [0, 1, 1, 1],
+    [1, 0, 0, 1],
+    [0, 1, 1, 0],
+] # 1 to spawn, first index = spawn in top lane
+OBSTACLE_LOWER_BOUND = 3 # if less obstacles, guarantee obstacle generation
+OBSTACLE_UPPER_BOUND = 8 # if more obstacles, no generation
 
 # colors
 WHITE = (255, 255, 255)
