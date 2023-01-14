@@ -16,6 +16,8 @@ class Main:
         button_y = (self.screen.get_height() / 2) - (button_height / 2)
         self.start_button = button.Button(button_width, button_height, button_x, button_y - 30, "Start")
         self.lb_button = button.Button(button_width + 40, button_height, button_x - 20, button_y + 30, "Leaderboard")
+
+        self.leaderboard = state.leaderboard.Leaderboard()
         
     def run(self):
         running = True
@@ -27,7 +29,8 @@ class Main:
                     if self.start_button.is_pressed(pygame.mouse.get_pos()):
                         state.runner.Runner().run()
                     elif self.lb_button.is_pressed(pygame.mouse.get_pos()):
-                        state.leaderboard.Leaderboard().run()
+                        self.leaderboard.add_score('Player 5', 33) # TODO remove later - for testing
+                        self.leaderboard.run()
                         
             self.start_button.draw(self.screen)
             self.lb_button.draw(self.screen)
