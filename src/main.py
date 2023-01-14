@@ -1,6 +1,7 @@
 import pygame
 import button
 import state.runner
+import state.leaderboard
 
 class Main:
     def __init__(self):
@@ -26,7 +27,7 @@ class Main:
                     if self.start_button.is_pressed(pygame.mouse.get_pos()):
                         state.runner.Runner().run()
                     elif self.lb_button.is_pressed(pygame.mouse.get_pos()):
-                        print("Leaderboard")
+                        state.leaderboard.Leaderboard().run()
                         
             self.start_button.draw(self.screen)
             self.lb_button.draw(self.screen)
