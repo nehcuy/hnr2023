@@ -1,5 +1,6 @@
 import pygame
 import start_button
+import state.runner
 
 class Main:
     def __init__(self):
@@ -22,8 +23,7 @@ class Main:
                     running = False
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if self.start_button.is_pressed(pygame.mouse.get_pos()):
-                        # Do something when the button is pressed
-                        print("Button pressed")
+                        state.runner.run()
                         
             self.start_button.draw(self.screen)
             pygame.display.flip()
