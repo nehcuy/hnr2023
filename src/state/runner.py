@@ -25,6 +25,13 @@ class Runner:
         is_running = True
         
         while is_running:
+            # update display
+            pygame.display.update()
+
+            # set fps
+            clock = pygame.time.Clock()
+            delta_time = clock.tick(constants.FPS)
+
             # score
             score = int(time.time() - constants.START_TIME)
 
@@ -41,13 +48,6 @@ class Runner:
             text = font.render(str(score), False, constants.WHITE)
             screen.blit(text, (constants.SCREEN_WIDTH - 50, 0))
 
-            # update display
-            pygame.display.update()
-
-            # set fps
-            clock = pygame.time.Clock()
-            delta_time = clock.tick(constants.FPS)
-
             # event loop
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -60,11 +60,11 @@ class Runner:
                     if event.key == pygame.K_UP:
                         if self.player_lane > 0:
                             self.player_lane -= 1
-                        player_y = constants.LANE_Y_POSITIONS[self.player_lane]
+                        self.player_y = constants.LANE_Y_POSITIONS[self.player_lane]
                     if event.key == pygame.K_DOWN:
                         if self.player_lane < 3:
                             self.player_lane += 1
-                        player_y = constants.LANE_Y_POSITIONS[self.player_lane]
+                        self.player_y = constants.LANE_Y_POSITIONS[self.player_lane]
 
             for i in range(len(constants.OBSTACLE_START_X_POSITIONS)):
                 if self.active:
@@ -75,17 +75,17 @@ class Runner:
                         
             # out-of-bounds constraints
             if self.player_y < 0:
-                player_y = constants.LANE_Y_POSITIONS[0]
+                self.player_y = constants.LANE_Y_POSITIONS[0]
 
             if self.player_y > constants.SCREEN_HEIGHT:
-                player_y = constants.LANE_Y_POSITIONS[3]
+                self.player_y = constants.LANE_Y_POSITIONS[3]
 
             if self.player_x < 0:
                 # TODO game over
-                player_x = 0
+                self.player_x = 0
             
-            if self.player_x > constants.SCREEN_WIDTH:
-                player_x = constants.SCREEN_WIDTH - (constants.PLAYER_X_SPEED * delta_time)
+            if self.player_x + 50 > constants.SCREEN_WIDTH:
+                self.player_x = constants.SCREEN_WIDTH - 50
                 
             pygame.display.flip()
         pygame.quit()
