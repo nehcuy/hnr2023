@@ -84,6 +84,7 @@ class Runner:
         new_obstacle.surface = pygame.transform.smoothscale(new_obstacle.surface, 
             (c.OBSTACLE_ASPECT_RATIO * c.OBSTACLE_SCALE, c.OBSTACLE_SCALE))
         return new_obstacle
+
     def generate_with_lane_pattern(self, screen):
         lane_pattern = random.randint(0, len(c.OBSTACLE_LANE_PATTERNS) - 1)
         if c.OBSTACLE_LANE_PATTERNS[lane_pattern][0] == 1:
@@ -116,6 +117,36 @@ class Runner:
             screen.blit(obstacle.surface, 
                     (obstacle.x_pos, c.LANE_Y_POSITIONS[obstacle.lane] - c.OBSTACLE_Y_OFFSET))
     
+    # background
+    background_frames = [pygame.image.load(os.path.join(c.APP_FOLDER, "images", "background", "Background1.png")),
+                        pygame.image.load(os.path.join(c.APP_FOLDER, "images", "background", "Background2.png")),
+                        pygame.image.load(os.path.join(c.APP_FOLDER, "images", "background", "Background3.png")),
+                        pygame.image.load(os.path.join(c.APP_FOLDER, "images", "background", "Background4.png")),
+                        pygame.image.load(os.path.join(c.APP_FOLDER, "images", "background", "Background5.png")),
+                        pygame.image.load(os.path.join(c.APP_FOLDER, "images", "background", "Background6.png")),
+                        pygame.image.load(os.path.join(c.APP_FOLDER, "images", "background", "Background7.png")),
+                        pygame.image.load(os.path.join(c.APP_FOLDER, "images", "background", "Background8.png")),
+                        pygame.image.load(os.path.join(c.APP_FOLDER, "images", "background", "Background9.png")),
+                        pygame.image.load(os.path.join(c.APP_FOLDER, "images", "background", "Background10.png")),
+                        pygame.image.load(os.path.join(c.APP_FOLDER, "images", "background", "Background11.png")),
+                        pygame.image.load(os.path.join(c.APP_FOLDER, "images", "background", "Background12.png")),
+                        pygame.image.load(os.path.join(c.APP_FOLDER, "images", "background", "Background13.png")),
+                        pygame.image.load(os.path.join(c.APP_FOLDER, "images", "background", "Background14.png")),
+                        pygame.image.load(os.path.join(c.APP_FOLDER, "images", "background", "Background15.png"))]
+
+    background_time_elapsed = 0
+    background_frame_index = 0
+    
+    def update_background(self, screen, delta_time):
+        self.background_time_elapsed += delta_time
+        if self.background_time_elapsed >= c.BACKGROUND_ANIMATION_THRESHOLD:
+            self.background_time_elapsed -= c.BACKGROUND_ANIMATION_THRESHOLD
+            self.background_frame_index += 1
+        if self.background_frame_index >= len(self.background_frames):
+            self.background_frame_index = 0
+
+        screen.blit(self.background_frames[self.background_frame_index], (0,0))
+
     def run(self):
         # initialize pygame
         pygame.init()
@@ -136,11 +167,8 @@ class Runner:
             # score
             score = int(time.time() - start_time)
 
-            # draw
-            screen.fill(c.GREY)
-            floor_divider_1 = pygame.draw.rect(screen, c.WHITE, pygame.Rect(0, c.SCREEN_HEIGHT / 4, c.SCREEN_WIDTH, 5))
-            floor_divider_2 = pygame.draw.rect(screen, c.WHITE, pygame.Rect(0, c.SCREEN_HEIGHT / 2, c.SCREEN_WIDTH, 5))
-            floor_divider_3 = pygame.draw.rect(screen, c.WHITE, pygame.Rect(0, c.SCREEN_HEIGHT / 4 * 3, c.SCREEN_WIDTH, 5))
+            # draw background
+            self.update_background(screen, delta_time)
             
             # player animations
             if pygame.key.get_pressed()[pygame.K_LEFT] or pygame.key.get_pressed()[pygame.K_a]: # character rolls
