@@ -1,12 +1,15 @@
+# imports
 import pygame
+import time
 
-# Initialize pygame
+# initialize pygame
 pygame.init()
 
 # constants
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 fps = 60
+start = time.time()
 
 # colors
 WHITE = (255, 255, 255)
@@ -21,15 +24,25 @@ player_y = 450
 delta_x = 0
 delta_y = 0
 gravity = 1
+score = 0
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Beaver Game")
 
 is_running = True
 while is_running:
+	# score
+	score = int(time.time() - start)
+
+	# draw
 	screen.fill(BLACK)
 	player = pygame.draw.rect(screen, BLUE, (player_x, player_y, 50, 50))
 	floor = pygame.draw.rect(screen, WHITE, (0, 500, SCREEN_WIDTH, 5))
+
+	# draw score in top right corner
+	font = pygame.font.SysFont('Comic Sans MS', 30)
+	text = font.render(str(score), False, WHITE)
+	screen.blit(text, (SCREEN_WIDTH - 50, 0))
 
 	# update display
 	pygame.display.update()
