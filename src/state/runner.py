@@ -12,6 +12,7 @@ class Runner:
     delta_x = 0
     delta_y = 0
     gravity = 1
+    value = 0
     score = 0
     spawn_index = random.randrange(0, len(constants.LANE_Y_POSITIONS) - 1)
     active = True
@@ -37,12 +38,21 @@ class Runner:
 
             # draw
             screen.fill(constants.BLACK)
-            player = pygame.draw.rect(screen, constants.BLUE, pygame.Rect(self.player_x, self.player_y - 25, 50, 50))
+            # player = pygame.draw.rect(screen, constants.BLUE, pygame.Rect(self.player_x, self.player_y - 25, 50, 50))
+            player_walk = [pygame.image.load("src/images/Walk-4.png"),
+						pygame.image.load("src/images/Walk-3.png"),
+						pygame.image.load("src/images/Walk-2.png"),
+						pygame.image.load("src/images/Walk-1.png")]
             floor_divider_1 = pygame.draw.rect(screen, constants.WHITE, pygame.Rect(0, constants.SCREEN_HEIGHT / 4, constants.SCREEN_WIDTH, 5))
             floor_divider_2 = pygame.draw.rect(screen, constants.WHITE, pygame.Rect(0, constants.SCREEN_HEIGHT / 2, constants.SCREEN_WIDTH, 5))
             floor_divider_3 = pygame.draw.rect(screen, constants.WHITE, pygame.Rect(0, constants.SCREEN_HEIGHT / 4 * 3, constants.SCREEN_WIDTH, 5))
             obstacle0 = pygame.draw.rect(screen, constants.RED, pygame.Rect(constants.OBSTACLE_START_X_POSITIONS[0], constants.LANE_Y_POSITIONS[self.spawn_index], 20, 20))
-
+            self.value += 1
+            if self.value >= len(player_walk):
+                self.value = 0
+            player = player_walk[self.value]
+            player = pygame.transform.smoothscale(player, (constants.PLAYER_WALK_RATIO * constants.SCREEN_HEIGHT/5, constants.SCREEN_HEIGHT/5))
+            screen.blit(player, (self.player_x, self.player_y - constants.PLAYER_Y_OFFSET))
             # draw score in top right corner
             font = pygame.font.SysFont('Arial', 30)
             text = font.render(str(score), False, constants.WHITE)
