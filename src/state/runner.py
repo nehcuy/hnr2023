@@ -2,6 +2,7 @@
 import pygame
 import time
 import random
+import os
 from . import constants
 
 class Runner:
@@ -39,10 +40,10 @@ class Runner:
             # draw
             screen.fill(constants.BLACK)
             # player = pygame.draw.rect(screen, constants.BLUE, pygame.Rect(self.player_x, self.player_y - 25, 50, 50))
-            player_walk = [pygame.image.load("src/images/Walk-4.png"),
-						pygame.image.load("src/images/Walk-3.png"),
-						pygame.image.load("src/images/Walk-2.png"),
-						pygame.image.load("src/images/Walk-1.png")]
+            player_walk = [pygame.image.load(os.path.join(constants.APP_FOLDER, "images", "Walk-4.png")),
+						pygame.image.load(os.path.join(constants.APP_FOLDER, "images", "Walk-3.png")),
+						pygame.image.load(os.path.join(constants.APP_FOLDER, "images", "Walk-2.png")),
+						pygame.image.load(os.path.join(constants.APP_FOLDER, "images", "Walk-1.png"))]
             floor_divider_1 = pygame.draw.rect(screen, constants.WHITE, pygame.Rect(0, constants.SCREEN_HEIGHT / 4, constants.SCREEN_WIDTH, 5))
             floor_divider_2 = pygame.draw.rect(screen, constants.WHITE, pygame.Rect(0, constants.SCREEN_HEIGHT / 2, constants.SCREEN_WIDTH, 5))
             floor_divider_3 = pygame.draw.rect(screen, constants.WHITE, pygame.Rect(0, constants.SCREEN_HEIGHT / 4 * 3, constants.SCREEN_WIDTH, 5))
