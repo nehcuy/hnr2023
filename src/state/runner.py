@@ -16,22 +16,27 @@ class Runner:
     delta_y = 0
     score = 0
 
-    # player images
+    # player
     player_frames = [pygame.image.load(os.path.join(constants.APP_FOLDER, "images", "character_frames", "Walk-4.png")),
 						pygame.image.load(os.path.join(constants.APP_FOLDER, "images", "character_frames", "Walk-3.png")),
 						pygame.image.load(os.path.join(constants.APP_FOLDER, "images", "character_frames", "Walk-2.png")),
 						pygame.image.load(os.path.join(constants.APP_FOLDER, "images", "character_frames", "Walk-1.png"))]
+    player = player_frames[0]
     player_frame_index = 0
     player_time_elapsed = 0
 
-    def update_player(self, player_frames, delta_time):
+    def update_player(self, screen, delta_time):
         self.player_time_elapsed += delta_time
         if self.player_time_elapsed >= constants.PLAYER_ANIMATION_THRESHOLD:
             self.player_time_elapsed -= constants.PLAYER_ANIMATION_THRESHOLD
             self.player_frame_index += 1
-        if self.player_frame_index >= len(player_frames):
+        if self.player_frame_index >= len(self.player_frames):
             self.player_frame_index = 0
-        return player_frames[self.player_frame_index]
+        
+        self.player = self.player_frames[self.player_frame_index]
+        self.player = pygame.transform.smoothscale(self.player, 
+            (constants.PLAYER_ASPECT_RATIO * constants.PLAYER_SCALE, constants.PLAYER_SCALE))
+        screen.blit(self.player, (self.player_x, self.player_y - constants.PLAYER_Y_OFFSET))
 
     # obstacles
     obstacle_list = []
@@ -86,9 +91,7 @@ class Runner:
             floor_divider_3 = pygame.draw.rect(screen, constants.WHITE, pygame.Rect(0, constants.SCREEN_HEIGHT / 4 * 3, constants.SCREEN_WIDTH, 5))
             
             # player animation
-            player = self.update_player(self.player_frames, delta_time)
-            player = pygame.transform.smoothscale(player, (constants.PLAYER_ASPECT_RATIO * constants.PLAYER_SCALE, constants.PLAYER_SCALE))
-            screen.blit(player, (self.player_x, self.player_y - constants.PLAYER_Y_OFFSET))
+            self.update_player(screen, delta_time)
 
             # draw & update obstacles
             self.update_obstacle(screen, delta_time, constants.OBSTACLE_SPEED)
