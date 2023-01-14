@@ -8,7 +8,7 @@ class Menu:
         self.screen_rect = screen.get_rect()
         self.bg_color = (0, 0, 0)
         self.text_color = (255, 255, 255)
-        self.font = pygame.font.SysFont(None, 48)
+        self.font = pygame.font.SysFont('Arial', 48)
         self.play_button = Button(self, "Play")
         self.exit_button = Button(self, "Exit")
 
