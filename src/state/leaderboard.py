@@ -1,5 +1,6 @@
 import pygame
 import button
+from . import constants
 
 
 class Leaderboard:
@@ -9,11 +10,10 @@ class Leaderboard:
 
         # state for leaderboard
         self.leaderboard = [
-            ('Player 1', 35), ('Player 2', 37), ('Player 3', 25),
-            ('Player 4', 20), ('Player 5', 33)
+            ('Player 1', 35), ('Player 2', 37), ('Player 3', 25), ('Player 4', 20)
         ]
 
-        self.screen = pygame.display.set_mode((400, 100 + 5 * 30))
+        self.screen = pygame.display.set_mode((constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT))
         pygame.display.set_caption("Hack and Roll: Leaderboard")
 
         # Create the button
@@ -25,11 +25,12 @@ class Leaderboard:
 
     def add_score(self, name, score):
         self.leaderboard.append((name, score))
-        self.leaderboard.sort(key=lambda x: x[1], reverse=True)
+        self.leaderboard = sorted(self.leaderboard, key=lambda x: x[1], reverse=True)
         self.leaderboard = self.leaderboard[:5]
 
     def run(self):
         running = True
+        self.screen.fill((0, 0, 0))
         while running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -40,10 +41,10 @@ class Leaderboard:
 
             # draw leaderboard with back button
             font = pygame.font.SysFont('Courier', 30)
-            for i in range(len(self.leaderboard[:5])):
+            for index, player in enumerate(self.leaderboard):
                 text = font.render(
-                    self.leaderboard[i][0] + ' - ' + "{:02d}".format(self.leaderboard[i][1]), True, (255, 255, 255))
-                self.screen.blit(text, (self.screen.get_width() / 2 - text.get_width() / 2, 70 + i * 30))
+                    player[0] + ': ' + "{:02d}".format(player[1]), True, (255, 255, 255))
+                self.screen.blit(text, (self.screen.get_width() / 2 - text.get_width() / 2, 70 + index * 30))
             self.back_button.draw(self.screen)
 
             # erase text when back button is pressed
