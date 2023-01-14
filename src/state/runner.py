@@ -3,7 +3,9 @@ import pygame
 import time
 import random
 import os
+
 from . import constants
+from . import Obstacle
 
 class Runner:
     # coordinates
@@ -31,6 +33,27 @@ class Runner:
             self.player_frame_index = 0
         return player_frames[self.player_frame_index]
 
+    # obstacles
+    obstacle_list = []
+    obstacle_chance = 0.05
+    obstacle_1 = Obstacle.Obstacle( 
+        pygame.image.load(os.path.join(constants.APP_FOLDER, "images", "character_frames", "Walk-4.png")),
+        "tree",
+        2, 500)
+    obstacle_1.surface = pygame.transform.smoothscale(obstacle_1.surface, (10, 10))
+    obstacle_list.append(obstacle_1)
+
+    def update_obstacle(self, screen, x_speed):
+        for obstacle in self.obstacle_list[:]:
+            obstacle.x_pos -= x_speed
+            if obstacle.x_pos < 0: # check out-of-bounds
+                self.obstacle_list.remove(obstacle)
+                continue
+            # within bounds, draw on screen
+            screen.blit(obstacle.surface, 
+                    (obstacle.x_pos, constants.LANE_Y_POSITIONS[obstacle.lane]))
+    
+
     def run(self):
         # initialize pygame
         pygame.init()
@@ -55,12 +78,15 @@ class Runner:
             floor_divider_1 = pygame.draw.rect(screen, constants.WHITE, pygame.Rect(0, constants.SCREEN_HEIGHT / 4, constants.SCREEN_WIDTH, 5))
             floor_divider_2 = pygame.draw.rect(screen, constants.WHITE, pygame.Rect(0, constants.SCREEN_HEIGHT / 2, constants.SCREEN_WIDTH, 5))
             floor_divider_3 = pygame.draw.rect(screen, constants.WHITE, pygame.Rect(0, constants.SCREEN_HEIGHT / 4 * 3, constants.SCREEN_WIDTH, 5))
-            # obstacle0 = pygame.draw.rect(screen, constants.RED, pygame.Rect(constants.OBSTACLE_START_X_POSITIONS[0], constants.LANE_Y_POSITIONS[self.spawn_index], 20, 20))
-
+            
             # player animation
             player = self.update_player(self.player_frames, delta_time)
             player = pygame.transform.smoothscale(player, (constants.PLAYER_ASPECT_RATIO * constants.PLAYER_SCALE, constants.PLAYER_SCALE))
             screen.blit(player, (self.player_x, self.player_y - constants.PLAYER_Y_OFFSET))
+
+            # draw & update obstacles
+            self.update_obstacle(screen, 10)
+                
 
             # draw score in top right corner
             font = pygame.font.SysFont('Arial', 30)
@@ -85,7 +111,7 @@ class Runner:
                             self.player_lane += 1
                         self.player_y = constants.LANE_Y_POSITIONS[self.player_lane]
                         
-            # out-of-bounds constraints
+            # player out-of-bounds constraints
             if self.player_y < 0:
                 self.player_y = constants.LANE_Y_POSITIONS[0]
 
