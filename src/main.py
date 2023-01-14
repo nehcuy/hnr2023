@@ -1,5 +1,5 @@
 import pygame
-import start_button
+import button
 import state.runner
 
 class Main:
@@ -13,7 +13,8 @@ class Main:
         button_height = 50
         button_x = (self.screen.get_width() / 2) - (button_width / 2)
         button_y = (self.screen.get_height() / 2) - (button_height / 2)
-        self.start_button = start_button.StartButton(button_width, button_height, button_x, button_y)
+        self.start_button = button.Button(button_width, button_height, button_x, button_y - 30, "Start")
+        self.lb_button = button.Button(button_width + 40, button_height, button_x - 20, button_y + 30, "Leaderboard")
         
     def run(self):
         running = True
@@ -24,8 +25,11 @@ class Main:
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if self.start_button.is_pressed(pygame.mouse.get_pos()):
                         state.runner.run()
+                    elif self.lb_button.is_pressed(pygame.mouse.get_pos()):
+                        print("Leaderboard")
                         
             self.start_button.draw(self.screen)
+            self.lb_button.draw(self.screen)
             pygame.display.flip()
         pygame.quit()
 

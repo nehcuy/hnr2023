@@ -1,7 +1,7 @@
 import pygame
 
-class StartButton:
-    def __init__(self, width, height, x, y):
+class Button:
+    def __init__(self, width, height, x, y, text):
         self.width = width
         self.height = height
         self.x = x
@@ -10,7 +10,7 @@ class StartButton:
         self.button = pygame.Surface((self.width, self.height))
         self.button.fill(self.color)
         self.font = pygame.font.SysFont("Arial", 24)
-        self.text = self.font.render("Start", True, (255, 255, 255))
+        self.text = self.font.render(text, True, (255, 255, 255))
     
     def draw(self, screen):
         screen.blit(self.button, (self.x, self.y))
