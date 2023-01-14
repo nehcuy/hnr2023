@@ -109,7 +109,7 @@ class Runner:
 
         
         for obstacle in self.obstacle_list[:]:
-            obstacle.x_pos -= x_speed + (self.score // 2) # speed up obstacles
+            obstacle.x_pos -= x_speed + (self.score // 10) # speed up obstacles
             if obstacle.x_pos < 0: # check out-of-bounds
                 self.obstacle_list.remove(obstacle)
                 continue
@@ -117,6 +117,36 @@ class Runner:
             screen.blit(obstacle.surface, 
                     (obstacle.x_pos, c.LANE_Y_POSITIONS[obstacle.lane] - c.OBSTACLE_Y_OFFSET))
     
+    # background
+    background_frames = [pygame.image.load(os.path.join(c.APP_FOLDER, "images", "background", "Background1.png")),
+                        pygame.image.load(os.path.join(c.APP_FOLDER, "images", "background", "Background2.png")),
+                        pygame.image.load(os.path.join(c.APP_FOLDER, "images", "background", "Background3.png")),
+                        pygame.image.load(os.path.join(c.APP_FOLDER, "images", "background", "Background4.png")),
+                        pygame.image.load(os.path.join(c.APP_FOLDER, "images", "background", "Background5.png")),
+                        pygame.image.load(os.path.join(c.APP_FOLDER, "images", "background", "Background6.png")),
+                        pygame.image.load(os.path.join(c.APP_FOLDER, "images", "background", "Background7.png")),
+                        pygame.image.load(os.path.join(c.APP_FOLDER, "images", "background", "Background8.png")),
+                        pygame.image.load(os.path.join(c.APP_FOLDER, "images", "background", "Background9.png")),
+                        pygame.image.load(os.path.join(c.APP_FOLDER, "images", "background", "Background10.png")),
+                        pygame.image.load(os.path.join(c.APP_FOLDER, "images", "background", "Background11.png")),
+                        pygame.image.load(os.path.join(c.APP_FOLDER, "images", "background", "Background12.png")),
+                        pygame.image.load(os.path.join(c.APP_FOLDER, "images", "background", "Background13.png")),
+                        pygame.image.load(os.path.join(c.APP_FOLDER, "images", "background", "Background14.png")),
+                        pygame.image.load(os.path.join(c.APP_FOLDER, "images", "background", "Background15.png"))]
+
+    background_time_elapsed = 0
+    background_frame_index = 0
+    
+    def update_background(self, screen, delta_time):
+        self.background_time_elapsed += delta_time
+        if self.background_time_elapsed >= c.BACKGROUND_ANIMATION_THRESHOLD:
+            self.background_time_elapsed -= c.BACKGROUND_ANIMATION_THRESHOLD
+            self.background_frame_index += 1
+        if self.background_frame_index >= len(self.background_frames):
+            self.background_frame_index = 0
+
+        screen.blit(self.background_frames[self.background_frame_index], (0,0))
+
     def run(self):
         # initialize pygame
         pygame.init()
@@ -125,6 +155,7 @@ class Runner:
 
         is_running = True
         start_time = time.time()
+        obstacles_destroyed = 0
 
         while is_running: # Game loop
             # update display
@@ -135,13 +166,11 @@ class Runner:
             delta_time = clock.tick(c.FPS)
 
             # score
-            score = int(time.time() - start_time)
+            time_elapsed = int(time.time() - start_time)
+            self.score = time_elapsed + obstacles_destroyed * 5
 
-            # draw
-            screen.fill(c.GREY)
-            floor_divider_1 = pygame.draw.rect(screen, c.WHITE, pygame.Rect(0, c.SCREEN_HEIGHT / 4, c.SCREEN_WIDTH, 5))
-            floor_divider_2 = pygame.draw.rect(screen, c.WHITE, pygame.Rect(0, c.SCREEN_HEIGHT / 2, c.SCREEN_WIDTH, 5))
-            floor_divider_3 = pygame.draw.rect(screen, c.WHITE, pygame.Rect(0, c.SCREEN_HEIGHT / 4 * 3, c.SCREEN_WIDTH, 5))
+            # draw background
+            self.update_background(screen, delta_time)
             
             # player animations
             if pygame.key.get_pressed()[pygame.K_LEFT] or pygame.key.get_pressed()[pygame.K_a]: # character rolls
@@ -168,24 +197,26 @@ class Runner:
                     if hold_right and not hold_left:
                         if is_collision and obstacle.type == 'tree':
                             self.obstacle_list.remove(obstacle)
+                            obstacles_destroyed += 1
                             break
 
                     # check if player is rolling over obstacle
                     if hold_left and not hold_right:
                         if is_collision and obstacle.type == 'rock':
                             self.obstacle_list.remove(obstacle)
+                            obstacles_destroyed += 1
                             break
 
                     if is_collision:
                         self.obstacle_list.clear()
                         is_running = False
-                        g_o.GameOver(self.leaderboard, score).run()
+                        g_o.GameOver(self.leaderboard, self.score, time_elapsed, obstacles_destroyed).run()
                         break
 
-            # draw score in top right corner
-            font = pygame.font.SysFont('Arial', 30)
-            text = font.render(str(score), False, c.WHITE)
-            screen.blit(text, (c.SCREEN_WIDTH - 50, 0))
+            # draw score in top right corner 
+            font = pygame.font.SysFont('courierms', 30)
+            text = font.render("Score: " + str(self.score), False, c.WHITE)
+            screen.blit(text, (c.SCREEN_WIDTH - 100, 10))
 
             # event loop
             for event in pygame.event.get():

@@ -42,6 +42,9 @@ OBSTACLE_LANE_PATTERNS = [
 OBSTACLE_LOWER_BOUND = 3 # if less obstacles, guarantee obstacle generation
 OBSTACLE_UPPER_BOUND = 8 # if more obstacles, no generation
 
+# background
+BACKGROUND_ANIMATION_THRESHOLD = 100 # milliseconds till new frame
+
 # colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
