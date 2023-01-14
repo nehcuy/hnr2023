@@ -35,15 +35,21 @@ class Runner:
 
     # obstacles
     obstacle_list = []
-    obstacle_chance = 0.05
-    obstacle_1 = Obstacle.Obstacle( 
-        pygame.image.load(os.path.join(constants.APP_FOLDER, "images", "character_frames", "Walk-4.png")),
-        "tree",
-        2, 500)
-    obstacle_1.surface = pygame.transform.smoothscale(obstacle_1.surface, (10, 10))
-    obstacle_list.append(obstacle_1)
+    obstacle_time_elapsed = 0
 
-    def update_obstacle(self, screen, x_speed):
+    def update_obstacle(self, screen, x_speed, delta_time):
+        self.obstacle_time_elapsed += delta_time
+        if self.obstacle_time_elapsed >= constants.OBSTACLE_CHANCE_THRESHOLD:
+            self.obstacle_time_elapsed -= constants.OBSTACLE_CHANCE_THRESHOLD
+            if random.random() <= constants.OBSTACLE_CHANCE:
+                new_obstacle = Obstacle.Obstacle( 
+                    pygame.image.load(os.path.join(constants.APP_FOLDER, "images", "character_frames", "Walk-4.png")),
+                    "tree",
+                    random.randint(0, 3), 
+                    constants.SCREEN_WIDTH)
+                new_obstacle.surface = pygame.transform.smoothscale(new_obstacle.surface, (10, 10))
+                self.obstacle_list.append(new_obstacle)
+        
         for obstacle in self.obstacle_list[:]:
             obstacle.x_pos -= x_speed
             if obstacle.x_pos < 0: # check out-of-bounds
@@ -85,8 +91,7 @@ class Runner:
             screen.blit(player, (self.player_x, self.player_y - constants.PLAYER_Y_OFFSET))
 
             # draw & update obstacles
-            self.update_obstacle(screen, 10)
-                
+            self.update_obstacle(screen, delta_time, constants.OBSTACLE_SPEED)
 
             # draw score in top right corner
             font = pygame.font.SysFont('Arial', 30)
