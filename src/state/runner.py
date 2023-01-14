@@ -28,12 +28,12 @@ class Runner:
     character_roll_frames = [pygame.image.load(os.path.join(c.APP_FOLDER, "images", "character_rolling", "Roll1.png")),
                         pygame.image.load(os.path.join(c.APP_FOLDER, "images", "character_rolling", "Roll2.png")),
                         pygame.image.load(os.path.join(c.APP_FOLDER, "images", "character_rolling", "Roll3.png")),
-                        pygame.image.load(os.path.join(c.APP_FOLDER, "images", "character_rolling", "Roll4.png")),]
+                        pygame.image.load(os.path.join(c.APP_FOLDER, "images", "character_rolling", "Roll1.png")),]
 
     character_chopping_frames = [pygame.image.load(os.path.join(c.APP_FOLDER, "images", "character_chopping", "Attack_1.png")),
                         pygame.image.load(os.path.join(c.APP_FOLDER, "images", "character_chopping", "Attack_2.png")),
                         pygame.image.load(os.path.join(c.APP_FOLDER, "images", "character_chopping", "Attack_3.png")),
-                        pygame.image.load(os.path.join(c.APP_FOLDER, "images", "character_chopping", "Attack_4.png")),]
+                        pygame.image.load(os.path.join(c.APP_FOLDER, "images", "character_chopping", "Attack_1.png")),]
 
     player = player_frames[0]
     player_frame_index = 0
@@ -55,19 +55,39 @@ class Runner:
     # obstacles
     obstacle_list = []
     obstacle_time_elapsed = 0
+    obstacle_type_total_weight = c.OBSTACLE_TREE_CHANCE + c.OBSTACLE_SPIKE_CHANCE + c.OBSTACLE_ROCK_CHANCE
+
+    def generate_new_obstacle(self, screen):
+        type_num = random.randint(1, self.obstacle_type_total_weight)
+        if type_num <= c.OBSTACLE_TREE_CHANCE: # tree
+            new_obstacle = obs.Obstacle(
+                pygame.image.load(os.path.join(c.APP_FOLDER, "images", "obstacles", "Tree.png")),
+                "tree",
+                random.randint(0, 3),
+                c.SCREEN_WIDTH)
+        elif type_num <= c.OBSTACLE_TREE_CHANCE + c.OBSTACLE_ROCK_CHANCE: # rock
+            new_obstacle = obs.Obstacle(
+                pygame.image.load(os.path.join(c.APP_FOLDER, "images", "obstacles", "Rock.png")),
+                "rock",
+                random.randint(0, 3),
+                c.SCREEN_WIDTH)
+        else: # spike
+            new_obstacle = obs.Obstacle(
+                pygame.image.load(os.path.join(c.APP_FOLDER, "images", "obstacles", "Spike.png")),
+                "spike",
+                random.randint(0, 3),
+                c.SCREEN_WIDTH)
+        
+        new_obstacle.surface = pygame.transform.smoothscale(new_obstacle.surface, 
+            (c.OBSTACLE_ASPECT_RATIO * c.OBSTACLE_SCALE, c.OBSTACLE_SCALE))
+        return new_obstacle
 
     def update_obstacle(self, screen, x_speed, delta_time):
         self.obstacle_time_elapsed += delta_time
         if self.obstacle_time_elapsed >= c.OBSTACLE_CHANCE_THRESHOLD:
             self.obstacle_time_elapsed -= c.OBSTACLE_CHANCE_THRESHOLD
             if random.random() <= c.OBSTACLE_CHANCE:
-                new_obstacle = obs.Obstacle(
-                    pygame.image.load(os.path.join(c.APP_FOLDER, "images", "character_uncoloured", "Walk-4.png")),
-                    "tree",
-                    random.randint(0, 3),
-                    c.SCREEN_WIDTH)
-                new_obstacle.surface = pygame.transform.smoothscale(new_obstacle.surface, (10, 10))
-                self.obstacle_list.append(new_obstacle)
+                self.obstacle_list.append(self.generate_new_obstacle(screen))
         
         for obstacle in self.obstacle_list[:]:
             obstacle.x_pos -= x_speed
@@ -76,7 +96,7 @@ class Runner:
                 continue
             # within bounds, draw on screen
             screen.blit(obstacle.surface, 
-                    (obstacle.x_pos, c.LANE_Y_POSITIONS[obstacle.lane]))
+                    (obstacle.x_pos, c.LANE_Y_POSITIONS[obstacle.lane] - c.OBSTACLE_Y_OFFSET))
     
 
     def run(self):
