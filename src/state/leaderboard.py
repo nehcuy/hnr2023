@@ -9,9 +9,7 @@ class Leaderboard:
         pygame.init()
 
         # state for leaderboard
-        self.leaderboard = [
-            ('Player 1', 35), ('Player 2', 37), ('Player 3', 25), ('Player 4', 20)
-        ]
+        self.leaderboard = []
 
         self.screen = pygame.display.set_mode((constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT))
         pygame.display.set_caption("Hack and Roll: Leaderboard")

@@ -29,9 +29,8 @@ class Main:
                     pygame.quit()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if self.start_button.is_pressed(pygame.mouse.get_pos()):
-                        state.runner.Runner().run()
+                        state.runner.Runner(self.leaderboard).run()
                     elif self.lb_button.is_pressed(pygame.mouse.get_pos()):
-                        self.leaderboard.add_score('Player 5', 33) # TODO remove later - for testing
                         self.leaderboard.run()
                         
             self.start_button.draw(self.screen)

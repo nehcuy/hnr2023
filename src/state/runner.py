@@ -11,6 +11,9 @@ sys.path.append("..")
 import obstacle as obs
 
 class Runner:
+    def __init__(self, leaderboard):
+        self.leaderboard = leaderboard
+
     # coordinates
     player_x = c.PLAYER_X_START
     player_y = c.PLAYER_Y_START
@@ -156,7 +159,7 @@ class Runner:
                     if obstacle.x_pos < self.player_x + c.PLAYER_ASPECT_RATIO * c.PLAYER_SCALE and obstacle.x_pos + 10 > self.player_x:
                         self.obstacle_list.clear()
                         is_running = False
-                        g_o.GameOver(score).run()
+                        g_o.GameOver(self.leaderboard, score).run()
 
             # draw score in top right corner
             font = pygame.font.SysFont('Arial', 30)
