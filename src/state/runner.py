@@ -84,7 +84,7 @@ class Runner:
         new_obstacle.surface = pygame.transform.smoothscale(new_obstacle.surface, 
             (c.OBSTACLE_ASPECT_RATIO * c.OBSTACLE_SCALE, c.OBSTACLE_SCALE))
         return new_obstacle
-
+        
     def generate_with_lane_pattern(self, screen):
         lane_pattern = random.randint(0, len(c.OBSTACLE_LANE_PATTERNS) - 1)
         if c.OBSTACLE_LANE_PATTERNS[lane_pattern][0] == 1:
@@ -189,15 +189,19 @@ class Runner:
                     # check if player is within obstacle's x range
                     is_collision = obstacle.x_pos < self.player_x + c.PLAYER_ASPECT_RATIO * c.PLAYER_SCALE and obstacle.x_pos + 10 > self.player_x
                     
+                    # key holding booleans
+                    hold_right = pygame.key.get_pressed()[pygame.K_RIGHT] or pygame.key.get_pressed()[pygame.K_d]
+                    hold_left = pygame.key.get_pressed()[pygame.K_LEFT] or pygame.key.get_pressed()[pygame.K_a]
+
                     # check if player is chopping obstacle
-                    if pygame.key.get_pressed()[pygame.K_RIGHT] or pygame.key.get_pressed()[pygame.K_d]:
+                    if hold_right and not hold_left:
                         if is_collision and obstacle.type == 'tree':
                             self.obstacle_list.remove(obstacle)
                             obstacles_destroyed += 1
                             break
 
                     # check if player is rolling over obstacle
-                    if pygame.key.get_pressed()[pygame.K_LEFT] or pygame.key.get_pressed()[pygame.K_a]:
+                    if hold_left and not hold_right:
                         if is_collision and obstacle.type == 'rock':
                             self.obstacle_list.remove(obstacle)
                             obstacles_destroyed += 1
@@ -219,7 +223,7 @@ class Runner:
                 if event.type == pygame.QUIT:
                     self.leaderboard.save_leaderboard()
                     pygame.quit()
-                    
+
                 if event.type == pygame.KEYDOWN:
 
                     if event.key == pygame.K_UP or event.key == pygame.K_w:
