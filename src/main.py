@@ -19,13 +19,21 @@ class Main:
         self.start_button = button.Button(button_width, button_height, button_x, button_y - 30, "Start")
         self.lb_button = button.Button(button_width + 40, button_height, button_x - 20, button_y + 30, "Leaderboard")
         self.tutorial_button = button.Button(button_width + 40, button_height, button_x - 20, button_y + 90, "Tutorial")
-
         self.leaderboard = state.leaderboard.Leaderboard()
         
     def run(self):
         running = True
         while running:
             self.screen.fill(c.GREY)
+
+            # Display game title
+            font = pygame.font.SysFont('couriernew', 64, bold=True)
+            text = font.render("Hack and Roll", True, c.BLACK)
+            self.screen.blit(text, (self.screen.get_width() / 2 - text.get_width() / 2, 50))
+            font = pygame.font.SysFont('couriernew', 36)
+            text = font.render("Try and hit 100 points!", True, c.BLACK)
+            self.screen.blit(text, (self.screen.get_width() / 2 - text.get_width() / 2, 150))
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.leaderboard.save_leaderboard()
