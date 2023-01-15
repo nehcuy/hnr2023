@@ -28,7 +28,7 @@ class Leaderboard:
         button_width = 100
         button_height = 50
         button_x = (self.screen.get_width() / 2) - (button_width / 2)
-        button_y = 45
+        button_y = self.screen.get_height() - 50
         self.back_button = button.Button(button_width, button_height, button_x, button_y - 30, "Back")
 
     def add_score(self, name, score, time_elapsed, obstacles_destroyed):
@@ -54,11 +54,30 @@ class Leaderboard:
                         running = False
 
             # draw leaderboard with back button
-            font = pygame.font.SysFont('couriernew', 30)
+            font = pygame.font.SysFont('couriernew', 16)
+            main_header_font = pygame.font.SysFont('couriernew', 24)
+            lb_header_text = main_header_font.render('Leaderboard', True, (255, 255, 255))
+            self.screen.blit(lb_header_text, (self.screen.get_width() / 2 - lb_header_text.get_width() / 2, 15))
+            name_header_text = font.render('Name', True, (255, 255, 255))
+            score_header_text = font.render('Score', True, (255, 255, 255))
+            time_header_text = font.render('Time Elapsed', True, (255, 255, 255))
+            obstacles_header_text = font.render('Obstacles Destroyed', True, (255, 255, 255))
+            total_width = 150 + name_header_text.get_width() + score_header_text.get_width() + time_header_text.get_width() + obstacles_header_text.get_width()
+            gap_between_headers = 50
+            self.screen.blit(name_header_text, (self.screen.get_width() / 2 - total_width / 2, 50))
+            self.screen.blit(score_header_text, (self.screen.get_width() / 2 - total_width / 2 + name_header_text.get_width() + gap_between_headers, 50))
+            self.screen.blit(time_header_text, (self.screen.get_width() / 2 - total_width / 2 + name_header_text.get_width() + score_header_text.get_width() + gap_between_headers * 2, 50))
+            self.screen.blit(obstacles_header_text, (self.screen.get_width() / 2 - total_width / 2 + name_header_text.get_width() + score_header_text.get_width() + time_header_text.get_width() + gap_between_headers * 3, 50))
+
             for index, player in enumerate(self.leaderboard):
-                text = font.render(
-                    player[0] + ': ' + "{:02d}".format(player[1]), True, (255, 255, 255))
-                self.screen.blit(text, (self.screen.get_width() / 2 - text.get_width() / 2, 70 + index * 30))
+                name_text = font.render(player[0], True, (255, 255, 255))
+                score_text = font.render(str(player[1]) + ' pt', True, (255, 255, 255))
+                time_text = font.render(str(player[2]) + ' seconds', True, (255, 255, 255))
+                obstacles_text = font.render(str(player[3]) + ' obstacles', True, (255, 255, 255))
+                self.screen.blit(name_text, (self.screen.get_width() / 2 - total_width / 2, 80 + index * 30))
+                self.screen.blit(score_text, (self.screen.get_width() / 2 - total_width / 2 + name_header_text.get_width() + gap_between_headers, 80 + index * 30))
+                self.screen.blit(time_text, (self.screen.get_width() / 2 - total_width / 2 + name_header_text.get_width() + score_header_text.get_width() + gap_between_headers * 2, 80 + index * 30))
+                self.screen.blit(obstacles_text, (self.screen.get_width() / 2 - total_width / 2 + name_header_text.get_width() + score_header_text.get_width() + time_header_text.get_width() + gap_between_headers * 3, 80 + index * 30))
             self.back_button.draw(self.screen)
 
             # erase text when back button is pressed
