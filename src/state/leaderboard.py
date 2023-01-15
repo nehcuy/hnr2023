@@ -23,7 +23,7 @@ class Leaderboard:
             pass
 
         self.screen = pygame.display.set_mode((constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT))
-        pygame.display.set_caption("Hack and Roll: Leaderboard")
+        pygame.display.set_caption("Hack and Roll")
 
         # Create the button
         button_width = 100

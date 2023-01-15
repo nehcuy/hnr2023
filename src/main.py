@@ -1,3 +1,4 @@
+import os
 import pygame
 import button
 import state.runner
@@ -10,6 +11,8 @@ class Main:
         pygame.init()
         self.screen = pygame.display.set_mode((c.SCREEN_WIDTH, c.SCREEN_HEIGHT))
         pygame.display.set_caption("Hack and Roll")
+        img = pygame.image.load(os.path.join("src", "images", "icon.png"))
+        pygame.display.set_icon(img)
 
         # Create the button
         button_width = 100
