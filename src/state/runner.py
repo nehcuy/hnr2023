@@ -78,25 +78,25 @@ class Runner:
         else:
             type_num = random.randint(1, self.obstacle_type_total_weight)
             
-            if type_num <= c.OBSTACLE_TREE_CHANCE: # tree
-                new_obstacle = obs.Obstacle(
-                    pygame.image.load(os.path.join(c.APP_FOLDER, "images", "obstacles", "Tree.png")),
-                    "tree",
-                    lane,
-                    c.SCREEN_WIDTH)
-            elif type_num <= c.OBSTACLE_TREE_CHANCE + c.OBSTACLE_ROCK_CHANCE: # rock
-                new_obstacle = obs.Obstacle(
-                    pygame.image.load(os.path.join(c.APP_FOLDER, "images", "obstacles", "Rock.png")),
-                    "rock",
-                    lane,
-                    c.SCREEN_WIDTH)
-            else: # spike
-                new_obstacle = obs.Obstacle(
-                    pygame.image.load(os.path.join(c.APP_FOLDER, "images", "obstacles", "Spike.png")),
-                    "spike",
-                    lane,
-                    c.SCREEN_WIDTH)
-            
+        if type_num <= c.OBSTACLE_TREE_CHANCE: # tree
+            new_obstacle = obs.Obstacle(
+                pygame.image.load(os.path.join(c.APP_FOLDER, "images", "obstacles", "Tree.png")),
+                "tree",
+                lane,
+                c.SCREEN_WIDTH)
+        elif type_num <= c.OBSTACLE_TREE_CHANCE + c.OBSTACLE_ROCK_CHANCE: # rock
+            new_obstacle = obs.Obstacle(
+                pygame.image.load(os.path.join(c.APP_FOLDER, "images", "obstacles", "Rock.png")),
+                "rock",
+                lane,
+                c.SCREEN_WIDTH)
+        else: # spike
+            new_obstacle = obs.Obstacle(
+                pygame.image.load(os.path.join(c.APP_FOLDER, "images", "obstacles", "Spike.png")),
+                "spike",
+                lane,
+                c.SCREEN_WIDTH)
+        
         new_obstacle.surface = pygame.transform.smoothscale(new_obstacle.surface, 
             (c.OBSTACLE_ASPECT_RATIO * c.OBSTACLE_SCALE, c.OBSTACLE_SCALE))
         return new_obstacle
@@ -241,7 +241,7 @@ class Runner:
                         g_o.GameOver(self.leaderboard, self.score, time_elapsed, obstacles_destroyed).run()
                         break
 
-            # draw score in top right corner 
+            # draw score in top right corner
             font = pygame.font.SysFont('courierms', 30)
             text = font.render("Score: " + str(self.score), False, c.WHITE)
             screen.blit(text, (c.SCREEN_WIDTH - 100, 10))
@@ -251,7 +251,7 @@ class Runner:
                 if event.type == pygame.QUIT:
                     self.leaderboard.save_leaderboard()
                     pygame.quit()
-
+                    
                 if event.type == pygame.KEYDOWN:
 
                     if event.key == pygame.K_UP or event.key == pygame.K_w:
