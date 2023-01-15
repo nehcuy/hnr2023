@@ -60,41 +60,69 @@ class Runner:
     obstacle_time_elapsed = 0
     obstacle_type_total_weight = c.OBSTACLE_TREE_CHANCE + c.OBSTACLE_SPIKE_CHANCE + c.OBSTACLE_ROCK_CHANCE
 
-    def generate_new_obstacle(self, screen, lane):
-        type_num = random.randint(1, self.obstacle_type_total_weight)
-        if type_num <= c.OBSTACLE_TREE_CHANCE: # tree
-            new_obstacle = obs.Obstacle(
+    def generate_new_obstacle(self, lane, spike_allowed):
+        if not spike_allowed:
+            type_num = random.randint(1, c.OBSTACLE_ROCK_CHANCE + c.OBSTACLE_TREE_CHANCE)
+            if type_num <= c.OBSTACLE_TREE_CHANCE:
+                new_obstacle = obs.Obstacle(
                 pygame.image.load(os.path.join(c.APP_FOLDER, "images", "obstacles", "Tree.png")),
                 "tree",
                 lane,
                 c.SCREEN_WIDTH)
-        elif type_num <= c.OBSTACLE_TREE_CHANCE + c.OBSTACLE_ROCK_CHANCE: # rock
-            new_obstacle = obs.Obstacle(
+            else:
+                new_obstacle = obs.Obstacle(
                 pygame.image.load(os.path.join(c.APP_FOLDER, "images", "obstacles", "Rock.png")),
                 "rock",
                 lane,
                 c.SCREEN_WIDTH)
-        else: # spike
-            new_obstacle = obs.Obstacle(
-                pygame.image.load(os.path.join(c.APP_FOLDER, "images", "obstacles", "Spike.png")),
-                "spike",
-                lane,
-                c.SCREEN_WIDTH)
-        
+        else:
+            type_num = random.randint(1, self.obstacle_type_total_weight)
+            
+            if type_num <= c.OBSTACLE_TREE_CHANCE: # tree
+                new_obstacle = obs.Obstacle(
+                    pygame.image.load(os.path.join(c.APP_FOLDER, "images", "obstacles", "Tree.png")),
+                    "tree",
+                    lane,
+                    c.SCREEN_WIDTH)
+            elif type_num <= c.OBSTACLE_TREE_CHANCE + c.OBSTACLE_ROCK_CHANCE: # rock
+                new_obstacle = obs.Obstacle(
+                    pygame.image.load(os.path.join(c.APP_FOLDER, "images", "obstacles", "Rock.png")),
+                    "rock",
+                    lane,
+                    c.SCREEN_WIDTH)
+            else: # spike
+                new_obstacle = obs.Obstacle(
+                    pygame.image.load(os.path.join(c.APP_FOLDER, "images", "obstacles", "Spike.png")),
+                    "spike",
+                    lane,
+                    c.SCREEN_WIDTH)
+            
         new_obstacle.surface = pygame.transform.smoothscale(new_obstacle.surface, 
             (c.OBSTACLE_ASPECT_RATIO * c.OBSTACLE_SCALE, c.OBSTACLE_SCALE))
         return new_obstacle
-        
+
     def generate_with_lane_pattern(self, screen):
         lane_pattern = random.randint(0, len(c.OBSTACLE_LANE_PATTERNS) - 1)
         if c.OBSTACLE_LANE_PATTERNS[lane_pattern][0] == 1:
-            self.obstacle_list.append(self.generate_new_obstacle(screen, 0))
+            if lane_pattern > 7:
+                self.obstacle_list.append(self.generate_new_obstacle(0, False))
+            else:
+                self.obstacle_list.append(self.generate_new_obstacle(0, True))
         if c.OBSTACLE_LANE_PATTERNS[lane_pattern][1] == 1:
-            self.obstacle_list.append(self.generate_new_obstacle(screen, 1))
+            if lane_pattern > 7:
+                self.obstacle_list.append(self.generate_new_obstacle(1, False))
+            else:
+                self.obstacle_list.append(self.generate_new_obstacle(1, True))
         if c.OBSTACLE_LANE_PATTERNS[lane_pattern][2] == 1:
-            self.obstacle_list.append(self.generate_new_obstacle(screen, 2))
+            if lane_pattern > 7:
+                self.obstacle_list.append(self.generate_new_obstacle(2, False))
+            else:
+                self.obstacle_list.append(self.generate_new_obstacle(2, True))
         if c.OBSTACLE_LANE_PATTERNS[lane_pattern][3] == 1:
-            self.obstacle_list.append(self.generate_new_obstacle(screen, 3))
+            if lane_pattern > 7:
+                self.obstacle_list.append(self.generate_new_obstacle(3, False))
+            else:
+                self.obstacle_list.append(self.generate_new_obstacle(3, True))
 
     def update_obstacle(self, screen, x_speed, delta_time):
         self.obstacle_time_elapsed += delta_time

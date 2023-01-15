@@ -34,10 +34,10 @@ OBSTACLE_LANE_PATTERNS = [
     [1, 0, 0, 0],
     [0, 0, 1, 1],
     [1, 1, 0, 0],
-    [1, 1, 1, 0],
-    [0, 1, 1, 1],
     [1, 0, 0, 1],
     [0, 1, 1, 0],
+    [1, 1, 1, 0],
+    [0, 1, 1, 1],
 ] # 1 to spawn, first index = spawn in top lane
 OBSTACLE_LOWER_BOUND = 3 # if less obstacles, guarantee obstacle generation
 OBSTACLE_UPPER_BOUND = 8 # if more obstacles, no generation
