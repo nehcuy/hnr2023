@@ -20,9 +20,8 @@ class GameOver:
         button_height = 50
         button_x = (self.screen.get_width() / 2) - (button_width / 2)
         button_y = (self.screen.get_height() / 2) - (button_height / 2)
-        self.lb_button = button.Button(button_width + 40, button_height, button_x - 20, button_y + 30, "Leaderboard")
+        self.main_menu_button = button.Button(button_width + 40, button_height, button_x - 20, button_y + 30, "Main Menu")
         self.play_again_button = button.Button(button_width + 40, button_height, button_x - 20, button_y - 30, "Play Again")
-        self.main_menu_button = button.Button(button_width + 40, button_height, button_x - 20, button_y + 90, "Main Menu")
 
     def run(self):
         running = True
@@ -34,9 +33,7 @@ class GameOver:
                     self.leaderboard.save_leaderboard()
                     pygame.quit()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    if self.lb_button.is_pressed(pygame.mouse.get_pos()):
-                        self.leaderboard.run()
-                    elif self.play_again_button.is_pressed(pygame.mouse.get_pos()):
+                    if self.play_again_button.is_pressed(pygame.mouse.get_pos()):
                         runner.Runner(self.leaderboard).run()
                     elif self.main_menu_button.is_pressed(pygame.mouse.get_pos()):
                         main.Main().run()
@@ -79,7 +76,6 @@ class GameOver:
             self.screen.blit(text, (self.screen.get_width() / 2 - text.get_width() / 2, 155))
 
             self.play_again_button.draw(self.screen)
-            self.lb_button.draw(self.screen)
             self.main_menu_button.draw(self.screen)
             pygame.display.flip()
         pygame.quit()

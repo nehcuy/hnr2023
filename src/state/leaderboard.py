@@ -1,5 +1,6 @@
 import pygame
 import button
+import main
 from . import constants
 
 class Leaderboard:
@@ -29,7 +30,7 @@ class Leaderboard:
         button_height = 50
         button_x = (self.screen.get_width() / 2) - (button_width / 2)
         button_y = self.screen.get_height() - 50
-        self.back_button = button.Button(button_width, button_height, button_x, button_y - 30, "Back")
+        self.main_menu_button = button.Button(button_width + 20, button_height, button_x - 10, button_y - 30, "Main Menu")
 
     def add_score(self, name, score, time_elapsed, obstacles_destroyed):
         self.leaderboard.append((name, score, time_elapsed, obstacles_destroyed))
@@ -50,8 +51,8 @@ class Leaderboard:
                     self.save_leaderboard()
                     pygame.quit()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    if self.back_button.is_pressed(pygame.mouse.get_pos()):
-                        running = False
+                    if self.main_menu_button.is_pressed(pygame.mouse.get_pos()):
+                        main.Main().run()
 
             # draw leaderboard with back button
             font = pygame.font.SysFont('couriernew', 16)
@@ -78,7 +79,7 @@ class Leaderboard:
                 self.screen.blit(score_text, (self.screen.get_width() / 2 - total_width / 2 + name_header_text.get_width() + gap_between_headers, 80 + index * 30))
                 self.screen.blit(time_text, (self.screen.get_width() / 2 - total_width / 2 + name_header_text.get_width() + score_header_text.get_width() + gap_between_headers * 2, 80 + index * 30))
                 self.screen.blit(obstacles_text, (self.screen.get_width() / 2 - total_width / 2 + name_header_text.get_width() + score_header_text.get_width() + time_header_text.get_width() + gap_between_headers * 3, 80 + index * 30))
-            self.back_button.draw(self.screen)
+            self.main_menu_button.draw(self.screen)
 
             # erase text when back button is pressed
             if not running:
