@@ -58,14 +58,24 @@ class Tutorial:
         text_rect.left = c.TUTORIAL_TEXT_SPACING + 20 + c.TUTORIAL_TEXT_SPACING
         self.screen.blit(text, text_rect)
 
-        self.screen.blit(rock, (c.TUTORIAL_TEXT_SPACING, c.SCREEN_HEIGHT / 2 + c.TUTORIAL_TEXT_SPACING))
+        self.screen.blit(rock, (c.TUTORIAL_TEXT_SPACING, c.SCREEN_HEIGHT / 2 + c.TUTORIAL_TEXT_SPACING - 15))
         text = font.render("Roll over the rock or change lanes to dodge!", True, c.BLACK)
-        text_rect.top += c.TUTORIAL_TEXT_SPACING * 2
+        text_rect.top += c.TUTORIAL_TEXT_SPACING * 2 - 10
         self.screen.blit(text, text_rect)
 
-        self.screen.blit(spike, (c.TUTORIAL_TEXT_SPACING, c.SCREEN_HEIGHT / 2 + c.TUTORIAL_TEXT_SPACING * 3))
+        self.screen.blit(spike, (c.TUTORIAL_TEXT_SPACING, c.SCREEN_HEIGHT / 2 + c.TUTORIAL_TEXT_SPACING * 3 - 36))
         text = font.render("Escape by only changing lanes!", True, c.BLACK)
-        text_rect.top += c.TUTORIAL_TEXT_SPACING * 2
+        text_rect.top += c.TUTORIAL_TEXT_SPACING * 2 - 10
+        self.screen.blit(text, text_rect)
+
+        font = pygame.font.SysFont('couriernew', 16)
+        text = font.render("Hint: You can hold down on the hack/roll buttons to make things easier.", True, c.BLACK)
+        text_rect.top += c.TUTORIAL_TEXT_SPACING * 2 - 20
+        text_rect.left = c.TUTORIAL_TEXT_SPACING
+        self.screen.blit(text, text_rect)
+
+        text = font.render("Hint: You earn more points hacking & rolling obstacles >:)", True, c.BLACK)
+        text_rect.top += c.TUTORIAL_TEXT_SPACING * 2 - 50
         self.screen.blit(text, text_rect)
         
     def run(self):
