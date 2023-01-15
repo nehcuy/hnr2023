@@ -63,7 +63,7 @@ class Tutorial:
         text_rect.top += c.TUTORIAL_TEXT_SPACING * 2 - 10
         self.screen.blit(text, text_rect)
 
-        self.screen.blit(spike, (c.TUTORIAL_TEXT_SPACING, c.SCREEN_HEIGHT / 2 + c.TUTORIAL_TEXT_SPACING * 3 - 25))
+        self.screen.blit(spike, (c.TUTORIAL_TEXT_SPACING, c.SCREEN_HEIGHT / 2 + c.TUTORIAL_TEXT_SPACING * 3 - 36))
         text = font.render("Escape by only changing lanes!", True, c.BLACK)
         text_rect.top += c.TUTORIAL_TEXT_SPACING * 2 - 10
         self.screen.blit(text, text_rect)
