@@ -137,7 +137,7 @@ class Runner:
 
         
         for obstacle in self.obstacle_list[:]:
-            obstacle.x_pos -= x_speed + (self.score // 10) # speed up obstacles
+            obstacle.x_pos -= x_speed + (self.score // 5) # speed up obstacles
             if obstacle.x_pos < 0: # check out-of-bounds
                 self.obstacle_list.remove(obstacle)
                 continue
